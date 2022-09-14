@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 
 class Perceptron(object):
@@ -45,9 +46,9 @@ class Perceptron(object):
         )  # 1d-array is fill in with zeros and it has the same number of rows of the array with the samples + 1
         self.errors_ = []  # new array for errors
 
-        #  Since we are coding for the training data, for each training sample xi performs the following steps:
+        """ Since we are coding for the training data, for each training sample xi performs the following steps:
         # 1. Compute the output value ^y. The output value is the class label predicted (1, -1) by the unit step function (ø(z)). Page 19
-        # 2. Update the weights
+        # 2. Update the weights (remember there is a weight per feature)"""
 
         for _ in range(self.n_iter):
             errors = 0
@@ -55,7 +56,7 @@ class Perceptron(object):
                 # Delta W is update, and it is calculated by the equation 2 in page 22, where self.eta is the is n(learning rate), target is the true class of the xi in the training sample, and self.predict(xi) is the predicted class label
                 update = self.eta * (target - self.predict(xi))
                 self.w_[1:] += update * xi
-                # update is saved in the first element of the self.w_ array
+                # the bias unit in the weight vector or threshold is saved in the first element of the self.w_ array
                 self.w_[0] += update
                 errors += int(update != 0.0)  # number of misclassifications
             self.errors_.append(errors)
@@ -65,7 +66,7 @@ class Perceptron(object):
     def net_input(self, X):
         """Calculate net input"""
         # Calculation of the vector dot product w^T*x
-        # returns the dot product of X and self.w_, and then sums the values of the update
+        # returns the dot product of X and self.w_, and then sums the values of self.w_[0], the "threshold" or so-called "bias unit."
         return np.dot(X, self.w_[1:]) + self.w_[0]
 
     def predict(self, X):
@@ -77,4 +78,10 @@ class Perceptron(object):
     """epochs: the number of passes over the training data set. Epochs are set by modifying the eta and n_iter"""
 
 
-"""Implementation of the Ov A technique to obtaine the class label that is closer to the largest absolute net input valie"""
+"""Implementation of the Ov A technique to obtain the class label that is closer to the largest absolute net input value"""
+
+df = pd.read_csv(
+    "/Users/elisamendoza/ws/myPythonPractice/PythonMachineLearning/Chapter 2/iris.data",
+    header=None,
+)
+print(df)
